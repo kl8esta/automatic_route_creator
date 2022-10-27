@@ -11,10 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => ['auth']], function(){
+    Route::get('/', 'UserController@index');
 });
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
