@@ -13,6 +13,7 @@
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/', 'UserController@index');
+    Route::get('/posts/create_route', 'RoutePostController@create');
 });
 
 Auth::routes();
