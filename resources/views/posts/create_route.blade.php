@@ -23,7 +23,7 @@
                 <h4>観光地リスト</h4>
             </div>
             <input type="submit" value="ルート投稿画面へ進む{最適なルートが計算されます}"/>
-            <p><a href="/post_route">APIができるまではこのページをクリック</a></p>
+            <p><a href="/posts/post_route">APIができるまではこのページをクリック</a></p>
         </form>
         <div class="back">
             <a href="/">マイページに戻る</a>
