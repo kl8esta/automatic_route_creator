@@ -11,8 +11,8 @@
         <link rel="stylesheet" href="/css/app.css">
     </head>
     <body>
-        <p><h1 class="title">公開済みルート</h1></p>
-        <p><h4 class="publisher">ユーザー【{{ $posted_user }}】</h4></p>
+        <p><h1 class="title">{{ $route_post->title }}</h1></p>
+        <p><h5 class="publisher">ユーザー【{{ $posted_user }}】</h5></p>
         <p class='edit'>
             <a href="/posts/{{ $route_post->id }}/edit">edit</a>
         </p>

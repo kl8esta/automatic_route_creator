@@ -10,7 +10,9 @@ class RoutePost extends Model
         'user_id',
         'title',
         'route_json',
-        'status_flag'
+        'status_flag',
+        'information',
+        'comment'
     ];
     
     public function users()
