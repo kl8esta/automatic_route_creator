@@ -10,13 +10,11 @@ class RoutePost extends Model
         'user_id',
         'title',
         'route_json',
-        'status_flag',
-        'information',
-        'comment',
+        'status_flag'
     ];
     
     public function users()
     {
-        return $this->hasMany('App\User');
+        return $this->belongsTo('App\User');
     }
 }

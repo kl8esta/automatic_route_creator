@@ -13,7 +13,7 @@ class RoutePostRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,7 @@ class RoutePostRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'route_post.title' => 'required|string|max:100'
         ];
     }
 }

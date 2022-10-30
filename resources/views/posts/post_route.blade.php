@@ -8,7 +8,7 @@
     </head>
     <body>
         <h1>ルート投稿</h1>
-        <form action="/posts/list" method="POST">
+        <form action="/posts" method="POST">
             @csrf
             <div class="title">
                 <h4>タイトル(必須)</h4>
@@ -37,13 +37,9 @@
                 </p>
             </div>
             <div class="post_option">
-                <h4>公開/非公開の設定</h4>
-                <select name="route_post[status_flag]">
-                    <option value="0">非公開でマイページに保存する</option>
-                    <option value="1">公開する</option>
-                </select>
             </div>
-            <p><input type="submit" value="ルートを保存"/></p>
+            <button type="submit" name="route_post[status_flag]" value="0">非公開する</button>
+            <button type="submit" name="route_post[status_flag]" value="1">公開する</button>
         </form>
         <div class="back">
             <p><a href="/posts/create_route">観光地の編集・追加</a></p>
