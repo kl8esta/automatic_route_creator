@@ -23,7 +23,7 @@
         <div class="route_creation">
             <h3>ルートガイド</h3>
             <div>
-                <h5><a href="/routes/create">自分で観光地を決める</a></h5>
+                <h5><a href="/posts/create_route">自分で観光地を決める</a></h5>
             </div>
             <div>
                 <h5><a href="/posts/list">みんなのルートを見る</a></h5>
