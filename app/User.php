@@ -39,6 +39,6 @@ class User extends Authenticatable
     
     public function routePost()
     {
-        return $this->belongsTo('App\RoutePost');
+        return $this->hasMany('App\RoutePost');
     }
 }
