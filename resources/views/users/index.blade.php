@@ -9,7 +9,7 @@
             <h3>ルート閲覧</h3>
             <div>
                 <h6>最近投稿したルート(3つ)</h6>
-                <p><a href="/posts/myroute/public">公開済みマイルート一覧</a></p>
+                <p><a href="/posts/public_list">公開済みマイルート一覧</a></p>
             </div>
             <div>
                 <h6>最近いいねしたルート(3つ)</h6>
@@ -17,7 +17,7 @@
             </div>
             <div>
                 <h6>最近作成したルート(3つ)</h6>
-                <p><a href="/posts/myroute/private">マイルート一覧</a></p>
+                <p><a href="/posts/private_list">マイルート一覧</a></p>
             </div>
         </div>
         <div class="route_creation">
@@ -26,7 +26,7 @@
                 <h5><a href="/posts/create_route">自分で観光地を決める</a></h5>
             </div>
             <div>
-                <h5><a href="/posts/list">みんなのルートを見る</a></h5>
+                <h5><a href="/posts/public_list">みんなのルートを見る</a></h5>
             </div>
         </div>
     </div>
