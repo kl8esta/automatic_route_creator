@@ -44,11 +44,21 @@ class RoutePostController extends Controller
         return view('posts/public_list_one')->with(['route_post' => $route_post, 'posted_user' => $posted_user]);
     }
     
-        public function private_list_one(RoutePost $route_post)
+    public function private_list_one(RoutePost $route_post)
     {
         //$posted_user = User::where('name','=',$route_post['user_id'])->first();
         $posted_user = DB::table('users')->where('id',$route_post['user_id'])->value('name');
         //dd($posted_user);
         return view('posts/private_list_one')->with(['route_post' => $route_post, 'posted_user' => $posted_user]);
     }
+    
+    public function show_public_list(RoutePost $route_post)
+    {
+        return view('posts/public_list')->with(['route_posts' => $route_post->getPaginateByLimit()]);
+    }
+    
+    /*public function show_private_list(RoutePost $route_post)
+    {
+        return view('posts/private_list')->with(['route_posts' => $route_post->getPaginateByLimit()]);
+    }*/
 }

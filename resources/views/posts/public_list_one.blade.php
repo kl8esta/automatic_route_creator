@@ -19,7 +19,7 @@
             <h5 class="updated_at">最終更新【{{ $route_post->updated_at }}】</h5>
         </p>
         <div class="content">
-            <div class="post_information">
+            <div class="spot_names">
                 <h5>観光ルート【a → b → c】</h5>
             </div>
             <div class="post_information">
