@@ -16,7 +16,10 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/posts', 'RoutePostController@save_form');
     Route::get('/posts/create_route', 'RoutePostController@create_route');
     Route::get('/posts/post_route', 'RoutePostController@post_route');
-    Route::get('/posts/list/{route_post}', 'RoutePostController@public_list_one');
+    Route::get('/posts/public_list/{route_post}', 'RoutePostController@public_list_one');
+    Route::get('/posts/private_list/{route_post}', 'RoutePostController@private_list_one');
+    Route::get('/posts/public_list', 'RoutePostController@show_public_list');
+    Route::get('/posts/private_list', 'UserController@show_private_list');
 });
 
 Auth::routes();
