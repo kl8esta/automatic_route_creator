@@ -20,6 +20,9 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/posts/private_list/{route_post}', 'RoutePostController@private_list_one');
     Route::get('/posts/public_list', 'RoutePostController@show_public_list');
     Route::get('/posts/private_list', 'UserController@show_private_list');
+    Route::get('/posts/{route_post}/edit', 'RoutePostController@editPost');
+    Route::put('/posts/{route_post}', 'RoutePostController@updatePost');
+    Route::delete('/posts/{route_post}', 'RoutePostController@delete');
 });
 
 Auth::routes();

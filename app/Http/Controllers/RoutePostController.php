@@ -61,4 +61,33 @@ class RoutePostController extends Controller
     {
         return view('posts/private_list')->with(['route_posts' => $route_post->getPaginateByLimit()]);
     }*/
+    
+    public function editPost(RoutePost $route_post)
+    {
+        return view('posts/edit_post')->with(['route_post' => $route_post]);
+    }
+    
+    public function updatePost(RoutePost $route_post, RoutePostRequest $request)
+    {
+        $input = $request['route_post'];
+        $input += ['user_id' => $request->user()->id];
+        $input += ['route_json' => '{ "spot": "Tokyo" }'];
+        $route_post->fill($input)->save();
+        if ($route_post->status_flag == 0)
+        {
+            return redirect('/posts/private_list/' . $route_post->id);
+        }
+        else 
+        {
+            return redirect('/posts/public_list/' . $route_post->id);
+        }
+    }
+    
+    public function delete(RoutePost $route_post)
+    {
+        $route_post->delete();
+        return redirect('/posts/private_list/');
+    }
+
 }
+

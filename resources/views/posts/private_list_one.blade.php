@@ -38,7 +38,22 @@
             <div style="display:inline-block; padding: 10px; margin-bottom: 10px; border: 5px double #333333; border-radius: 10px;">
                <a href="/posts/{{ $route_post->id }}/edit">再編集する</a>
             </div>
+            <form action="/posts/{{ $route_post->id }}" id="form_{{ $route_post->id }}" method="post">
+                @csrf
+                @method('DELETE')
+                <button type="button" onclick="deletePost({{ $route_post->id }})">この投稿を削除する</button>
+            </form>
         </div>
     </body>
+    <script>
+        function deletePost(id) {
+            'use strict'
+    
+            if (confirm('削除すると復元できません。\n本当に削除しますか？')) 
+            {
+                document.getElementById(`form_${id}`).submit();
+            }
+        }
+    </script>
 </html>
 @endsection
