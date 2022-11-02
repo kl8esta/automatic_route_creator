@@ -6,7 +6,10 @@
     <body>
         <h1>公開済みルート一覧</h1>
         <h5>{{Auth::user()->name}}</h5>
-        <p class='create'>
+        <p class='create' style="display:inline-block; padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px;">
+            <a href='/posts/private_list'>→ マイルート一覧へ</a>
+        </p>
+        <p class='create' style="display:inline-block; padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px;">
             <a href='/posts/create_route'>ルートの新規作成</a>
         </p>
         <div class='route_posts'>

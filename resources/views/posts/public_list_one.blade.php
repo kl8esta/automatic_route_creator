@@ -34,7 +34,7 @@
                 <a href="/posts/public_list">公開済みルート一覧に戻る</a>
             </div>
             <div class='edit' style="display:inline-block; padding: 10px; margin-bottom: 10px; border: 5px double #333333; border-radius: 10px;">
-               <a href="/posts/{{ $route_post->id }}/edit">再編集する</a>
+                <a href="/posts/private_list">マイルート一覧に戻る</a>
             </div>
         </div>
     </body>
