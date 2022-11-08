@@ -41,7 +41,7 @@
                 <br>
                 <input type="text" id="end" value="" placeholder="観光地4" class="form-control">
                 <div id="route-result" style="height: 52px;">
-                                <div id="route-panel"></div>
+                <div id="route-panel"></div>
                 </div>
             </div>
             <br>
@@ -55,104 +55,141 @@
             <a href="/">マイページに戻る</a>
         </div>
         <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
-        <div id="map" style="width: 500px; height: 500px;">
+        <div id="map" style="width: 700px; height: 500px;">
             
         </div>
     </body>
+    <!-- ↓Googleマップに関するJavaScript記述 -->
     <script>
         function initAutocomplete() {
-        const map = new google.maps.Map(
-            document.getElementById("map"),
-            {
-              center: { lat: 35.6810, lng: 139.7673 },
-              zoom: 13,
-              mapTypeId: "roadmap",
-            }
-          );
+            // マップの生成
+            // 参考「https://developers.google.com/maps/documentation/javascript/examples/places-searchbox」
+            const map = new google.maps.Map(
+                document.getElementById("map"),
+                {
+                    center: { lat: 35.6810, lng: 139.7673 },
+                    zoom: 13,
+                    mapTypeId: "roadmap",
+                }
+            );
         
-          // Create the search box and link it to the UI element.
-          const input = document.getElementById("pac-input");
-          const searchBox = new google.maps.places.SearchBox(input);
+            // 検索BOXの作成
+            const input = document.getElementById("pac-input");
+            const searchBox = new google.maps.places.SearchBox(input);
+         
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
         
-          map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-        
-          // Bias the SearchBox results towards current map's viewport.
-          map.addListener("bounds_changed", () => {
-            searchBox.setBounds(map.getBounds());
-          });
-        
-          let markers = [];
-        
-          // Listen for the event fired when the user selects a prediction and retrieve
-          // more details for that place.
-          searchBox.addListener("places_changed", () => {
-            const places = searchBox.getPlaces();
+            // 検索範囲を今見えている範囲に限定
+            map.addListener("bounds_changed", () => {
+                searchBox.setBounds(map.getBounds());
+            });
             
-            // Create an info window to share between markers.
-            const infoWindow = new google.maps.InfoWindow();
+            // マーカー用の変数
+            let markers = [];
+            
+            //キーワードを変えたときの検索結果を変化させる処理
+            searchBox.addListener("places_changed", () => {
+                // 検索結果の複数の場所を格納
+                const places = searchBox.getPlaces();
         
-            if (places.length == 0) {
-              return;
-            }
+                if (places.length == 0) {
+                    return;
+                }
         
-            // Clear out the old markers.
-            markers.forEach((marker) => {
-              marker.setMap(null);
-            });
-            markers = [];
+                // 表示されていたマーカの消去
+                markers.forEach((marker) => {
+                    marker.setMap(null);
+                });
+                markers = [];
         
-            // For each place, get the icon, name and location.
-            const bounds = new google.maps.LatLngBounds();
+                // **検索結果の場所ごとにマーカを付与**
+                const bounds = new google.maps.LatLngBounds();
+                // 場所ごとの情報をウィンドウ表示するための変数
+                const infoWindow = new google.maps.InfoWindow();        
+                // 各場所に対する処理
+                places.forEach((place) => {
+                    if (!place.geometry || !place.geometry.location) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
         
-            places.forEach((place) => {
-              if (!place.geometry || !place.geometry.location) {
-                console.log("Returned place contains no geometry");
-                return;
-              }
+                    /*const icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25),
+                    };*/
         
-              /*const icon = {
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(25, 25),
-              };*/
-        
-              // Create a marker for each place.
-              /*markers.push(
-                new google.maps.Marker({
-                  map,
-                  title: place.name,
-                  position: place.geometry.location,
-                })
-              );*/
-              const marker = new google.maps.Marker({
-                  map,
-                  title: place.name,
-                  stars: place.rating,
-                  position: place.geometry.location,
-              });
+                    /*markers.push(
+                        new google.maps.Marker({
+                            map,
+                            title: place.name,
+                            position: place.geometry.location,
+                        })
+                    );*/
+                
+                    // 各マーカーに付与する場所の情報(場所名, 平均評価, 総レビュー数, 
+                    // 場所の写真, 住所, その他未実装)
+                    const marker = new google.maps.Marker({
+                        map,
+                        title: place.name,
+                        stars: place.rating,
+                        total_reviews: place.user_ratings_total,
+                        picture: place.photos[0].getUrl(),
+                        address: place.formatted_address,
+                        attributions: place.html_attributions[0],
+                        url: place.url,
+                        position: place.geometry.location,
+                    });
               
-              // Add a click listener for each marker, and set up the info window.
-              marker.addListener("click", () => {
-                infoWindow.close();
-                infoWindow.setContent(marker.getTitle());
-                infoWindow.open(marker.getMap(), marker);
-              });
+                    /*const infoWindow = new google.maps.InfoWindow({
+                        content: marker.getTitle() + "\r\n 【平均評価:" + String(marker.stars) + "/5.0】",
+                        ariaLabel: marker.getTitle(),
+                    });*/
               
-              markers.push(marker);
+                    const place_info =
+                        '<div id="content" style="width: 200px; height: 200px;">' +
+                        '<h3 id="firstHeading" class="firstHeading">'+
+                        marker.getTitle() + 
+                        "</h3>" + 
+                        '<div id ="info" display: flex;>' +
+                        "<img src=" + 
+                        marker.picture +
+                        ' width="100" height="100">' +
+                        '<p>評価：' + 
+                        marker.stars +
+                        " /5<br>" + 
+                        marker.total_reviews +  
+                        "人のレビュー<br>" + 
+                        marker.address +
+                        "</p></div>" +
+                        "</div>";
+              
+                    // 1つのマーカをクリックしたときに場所の情報をウィンドウ表示する処理
+                    marker.addListener("click", () => {
+                        infoWindow.close();
+                        /*infoWindow.setContent(marker.getTitle() + "\r\n 【平均評価：" + String(marker.stars) + "/5.0】" +
+                        "評価人数"  + marker.picture);*/
+                        infoWindow.setContent(place_info);
+                        infoWindow.open(marker.getMap(), marker);
+                    });
+                
+                    // 各マーカを1つに格納
+                    markers.push(marker);
         
-              if (place.geometry.viewport) {
-                // Only geocodes have viewport.
-                bounds.union(place.geometry.viewport);
-              } else {
-                bounds.extend(place.geometry.location);
-              }
+                    if (place.geometry.viewport) {
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
             });
-            map.fitBounds(bounds);
-          });
         }
+        window.initAutocmplete = initAutocomplete;
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBX-T2KgCdV5nEYyUZmcFLflMmW76c7gHs&callback=initAutocomplete&libraries=places" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBX-T2KgCdV5nEYyUZmcFLflMmW76c7gHs&callback=initAutocomplete&libraries=places" defer>
+    </script>
 </html>
 @endsection
