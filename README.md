@@ -1,78 +1,53 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# 観光ルート自動作成アプリ
+## アプリの内容
+### (1)観光ルート自動作成
+出発地と観光地を入力すると回る順番(観光ルート)が自動的に出力される
+### (2)観光ルートの投稿
+・作成されたルートを公開し、実際に観光してみた感想や、道路情報などをSNS形式で投稿
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+・他の人が作成したルートを観光時の参考にしたり、いいね評価をすることが可能
 
-## About Laravel
+## 作成背景
+### 問題点
+・あまり行ったことない都道府県の場合、どの観光スポットを回れば良いか分からない
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+・多くの地図アプリは観光地の回る順番を手動で並び替える必要があり、自分で観光ルートを計画するのが大変
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### アプリの目的
+・行きたい観光スポットをピックアップし、最適な観光ルートを自動で提示するようにする
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+・他の人が投稿したルートや感想を参考にして、行きたい場所のイメージを膨らませられるようにする
 
-## Learning Laravel
+## 環境
+OS: Windows10
+言語: PHP, SQL, JavaScript, HTML
+フレームワーク: Laravel 6
+使用するAPI: Google Maps API
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 機能一覧(太字表記が現在実装済み)
+#### ・アカウントログイン・新規登録
+#### ・マイページ(作成・保存したルート、ルート作成ページのリンク先などを記載)
+#### ・検索した観光スポットの候補のマップ表示
+・行きたい観光地をピックアップし、最適経路を出力
+#### ・ルート投稿ページ
+→(現在最適経路のマップは除く)タイトル、感想、道路情報を入力し投稿
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+→非公開保存(自分のみ閲覧可能or下書き)、公開を選択可能
+#### ・ルート投稿一覧ページ
+→タイトル、投稿者ユーザ名、最終更新、経路マップ(未実装)などの情報を記載
 
-## Laravel Sponsors
+→他人が投稿して全てのルートを見られる
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+→自分が作成したルート投稿(公開・下書き全て)も見られる
+#### ・ルート投稿詳細ページ(一覧ページでタイトルをクリックすると移動)
+経路マップ(未実装)、感想、道路情報(補足)を閲覧可能
+#### ・マイルートの編集・削除
+→下書きルートの再編集・削除を行う機能
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+・公開ルートにいいねをする
 
-## Contributing
+→各公開ルートに「いいねボタン + いいね数」を実装、一覧ページで確認可能
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 苦労していること
+Google Maps API を連携させてマップ表示する箇所、最適経路を計算しマップ出力する箇所
+(APIのドキュメントを読みつつ実装中)
