@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\DB;
 class RoutePostController extends Controller
 {
     public function create_route()
-    {
-        return view('posts/create_route');
+    {   
+        $gapi = env('GOOGLE_MAPS_API_KEY'); 
+        return view('posts/create_route')->with(['gapi' => $gapi]);
     }
     
     public function post_route()
