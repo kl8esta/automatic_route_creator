@@ -17,23 +17,121 @@
         <ul id="disp_list">
         </ul>
         <!--button id="delete_btn" style="from-green-400 to-blue-500">削除</button><-->
-        <form action="/post_route" method="POST">
+        <button id="route_direction" style="from-green-400 to-blue-500">観光ルートを表示する</button>
+        <button id="list_value" type="button" style="from-green-400 to-blue-500">試験用</button>
+        <div id="route_info" class="form-group">
+            <div id="route_panel" style="display: inline-block;"></div>
+            <div id="route_map" style="display: inline-block; width: 400px; height: 300px;"></div>
+        </div>
+        <form action="/pre_posts" method="POST">
             @csrf
-            <div id="route-condition" class="form-group">
-                <div id="route-result" style="height: 52px;">
-                    <div id="route-panel"></div>
-                </div>
+            <div class="json">
+                <input type="text" name="list_json" id="list_to_route"/>
+                <p class="title__error" style="color:red">{{ $errors->first('differ') }}</p>
             </div>
-            <br>
-            <input type="submit" value="ルート投稿画面へ進む{最適なルートが計算されます}"/>
-            <p><a href="/posts/post_route">APIができるまではこのページをクリック</a></p>
+            <button type="submit" id="direct_route">ルートを作成</button>
         </form>
+        <p><a href="/posts/post_route">APIができるまではこのページをクリック</a></p>
         <div class="back">
             <a href="/">マイページに戻る</a>
         </div>
     </body>
     <!-- ↓Googleマップに関するJavaScript記述 -->
     <script>
+        // 行きたいところ(観光地リスト)に追加した観光地名の格納用
+        let place_list = [];
+        const list_value = document.getElementById('list_value');
+        list_value.addEventListener('click', () => {
+            var wayPoints = new Array();
+            for (let i = 1; i < place_list.length-1; i++)
+            {
+                wayPoints.push({location: place_list[i]});
+            }
+            request = {
+                origin: place_list[0],  // 出発地
+                destination: place_list[place_list.length-1],  // 到着地
+                avoidHighways: true, // 高速は利用しない
+                travelMode: google.maps.TravelMode.DRIVING, // 車モード
+                optimizeWaypoints: true, // 最適化を有効
+                waypoints: wayPoints // 経由地
+            }
+            //let json = JSON.stringify(request);
+            const list_to_route = document.getElementById('list_to_route');
+            list_to_route.value = json;
+            console.log(json);
+            //list_to_route.value = request;
+            //console.log(request);
+        });
+        
+        /*function jsonSet()
+        {
+            console.log("on");
+            request = {
+                origin: place_list[0],  // 出発地
+                destination: place_list[place_list.length-1],  // 到着地
+                avoidHighways: true, // 高速は利用しない
+                travelMode: google.maps.TravelMode.DRIVING, // 車モード
+                optimizeWaypoints: true, // 最適化を有効
+                waypoints: wayPoints // 経由地
+            }
+            
+            const list_to_route = document.getElementById('list_to_route');
+            list_to_route.value = request;
+        }*/
+        
+        const route_btn = document.getElementById('route_direction');
+        /*const route_map = new google.maps.Map(
+            document.getElementById("route_map"),
+            {
+                center: { lat: 35.6810, lng: 139.7673 },
+                zoom: 13,
+                mapTypeId: "roadmap",
+            }
+        );*/
+        route_btn.addEventListener('click', () => {
+            var wayPoints = new Array();
+            /*place_list.forEach((spot) => {
+                wayPoints.push({location: spot});
+            });*/
+            for (let i = 1; i < place_list.length-1; i++)
+            {
+                wayPoints.push({location: place_list[i]});
+            }
+            // DirectionsService生成
+            var directionsService = new google.maps.DirectionsService();
+            
+            // DirectionｓRenderer生成
+            var directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setPanel(document.getElementById('route_panel'));
+            directionsRenderer.setMap(route_map);
+            // ルート検索実行
+            directionsService.route({
+                origin: place_list[0],  // 出発地
+                destination: place_list[place_list.length-1],  // 到着地
+                avoidHighways: true, // 高速は利用しない
+                travelMode: google.maps.TravelMode.DRIVING, // 車モード
+                optimizeWaypoints: true, // 最適化を有効
+                waypoints: wayPoints // 経由地
+                }, function(response, status) {
+                    console.log(response);
+                    if (status === google.maps.DirectionsStatus.OK) {
+                    directionsRenderer.setDirections(response);
+                    var legs = response.routes[0].legs;
+                    
+                    // 総距離と総時間の合計する
+                    var dis = 0;
+                    var sec = 0;
+                    $.each(legs, function(i, val) {
+                        sec += val.duration.value;
+                        dis += val.distance.value;
+                    });
+                    console.log("distance=" + dis + ", secound=" + sec);
+                    } else {
+                    alert('Directions 失敗(' + status + ')');
+                    }
+                });	        
+        });
+        
         function initAutocomplete() {
             // マップの生成
             // 参考「https://developers.google.com/maps/documentation/javascript/examples/places-searchbox」
@@ -57,8 +155,6 @@
                 searchBox.setBounds(map.getBounds());
             });
             
-            // 行きたいところ(観光地リスト)に追加した観光地名の格納用
-            let place_list = [];
             //現在の追加済み観光地数
             let num_places = 0;
             // マーカー用の変数
@@ -152,7 +248,8 @@
                             '<h3 id="firstHeading" class="firstHeading">'+
                             marker.getTitle() + 
                             "</h3>" + 
-                            '<div id ="info" display: flex;>' +
+                            '<div id ="info" style="display: flex;">' +
+                            "<div>" +
                             "<img src=" + 
                             marker.picture +
                             ' width="100" height="100">' +
@@ -162,11 +259,12 @@
                             marker.total_reviews +  
                             "人のレビュー" + 
                             "</p></div>" +
+                            "<div>"+
                             '<button id ="add_btn' + 
                             String(i) +
                             '" type="button">目的地に追加</button><p>'+
                             marker.address +
-                            "</p></div>";  
+                            "</p></div></div>";  
                         //console.log(marker);
                         //out_clicks += 1;
                         //in_clicks[i] = out_clicks;
@@ -278,7 +376,7 @@
         window.initAutocmplete = initAutocomplete;
         
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ $gapi }}&callback=initAutocomplete&libraries=places" defer>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ $gapi }}&callback=initAutocomplete&libraries=places,geometry" defer>
     </script>
 </html>
 @endsection

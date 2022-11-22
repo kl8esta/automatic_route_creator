@@ -21,10 +21,11 @@ class RoutePostRequest extends FormRequest
      *
      * @return array
      */
+    //'list_json' => 'required|json'
     public function rules()
     {
         return [
-            'route_post.title' => 'required|string|max:100'
+            'route_post.title' => 'required|string|max:100',
         ];
     }
 }

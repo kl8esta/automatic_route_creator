@@ -13,6 +13,9 @@
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/', 'UserController@index');
+    //create_route.bladeでのform送信で発生
+    Route::post('/pre_posts', 'RoutePostController@save_route');
+    //post_route.bladeでのform送信で発生
     Route::post('/posts', 'RoutePostController@save_form');
     Route::get('/posts/create_route', 'RoutePostController@create_route');
     Route::get('/posts/post_route', 'RoutePostController@post_route');
