@@ -2,9 +2,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>マイページ</h1>
-    <h4 class="name">ユーザー【{{Auth::user()->name}}】</h4><br>
-    <div class="content">
+    <h1 style="padding: 10px">マイページ</h1>
+    <h4 class="name" style="padding: 10px">ユーザー【{{Auth::user()->name}}】</h4><br>
+    <div class="content" style="padding: 20px">
         <div class="posts_list">
             <h3>ルート閲覧</h3>
             <div>
