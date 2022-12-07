@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
     </head>
-    <body>
+    <body style="padding: 10px;">
         <h1>ルート投稿</h1>
         <form action="/posts" method="POST">
             @csrf

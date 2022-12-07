@@ -10,30 +10,30 @@
     <body style="padding: 20px">
         <h1>ルートガイド</h1>
         <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
-        <div id="map" style="width: 700px; height: 500px;"></div>
-        <!--button id="btn" style="from-green-400 to-blue-500">CLICK</button><-->
-        <h4>追加した観光地(回る順番は自動で決まります)</h4>
-        <h6>最大8か所追加できます(最初に出発地を入力してください)</h6>
-        <ul id="disp_list">
-        </ul>
-        <!--button id="delete_btn" style="from-green-400 to-blue-500">削除</button><-->
-        <button id="route_direction" style="from-green-400 to-blue-500">観光ルートを表示する</button>
-        <button id="list_value" type="button" style="from-green-400 to-blue-500">試験用</button>
-        <div id="route_info" class="form-group">
-            <div id="route_panel" style="display: inline-block;"></div>
-            <div id="route_map" style="display: inline-block; width: 400px; height: 300px;"></div>
-        </div>
-        <form action="/pre_posts" method="POST">
-            @csrf
-            <div class="json">
-                <input type="text" name="list_json" id="list_to_route"/>
-                <p class="title__error" style="color:red">{{ $errors->first('differ') }}</p>
+        <div style="display: flex;">
+            <div class="view_left" id="map" style="width: 700px; height: 500px;"></div>
+            <!--button id="btn" style="from-green-400 to-blue-500">CLICK</button><-->
+            <div class="view_right" style="padding: 10px">
+                <h4>追加した観光地(回る順番は自動で決まります)</h4>
+                <h6>最大8か所追加できます(最初に出発地を入力してください)</h6>
+                <ul id="disp_list">
+                </ul>
+                <!--button id="delete_btn" style="from-green-400 to-blue-500">削除</button><-->
+                <!--button id="route_direction" style="from-green-400 to-blue-500">観光ルートを表示する</button-->
+                <!--button id="list_value" type="button" style="from-green-400 to-blue-500">試験用</button-->
+                <form action="/pre_posts" method="POST">
+                    @csrf
+                    <div class="json">
+                        <input type="hidden" name="list_json" id="list_to_route"/>
+                        <p class="title__error" style="color:red">{{ $errors->first('differ') }}</p>
+                    </div>
+                    <button type="submit" id="direct_route">ルートを作成</button>
+                </form>
+                <!--p><a href="/posts/post_route">APIができるまではこのページをクリック</a></p-->
+                <div class="back">
+                    <a href="/">マイページに戻る</a>
+                </div>
             </div>
-            <button type="submit" id="direct_route">ルートを作成</button>
-        </form>
-        <!--p><a href="/posts/post_route">APIができるまではこのページをクリック</a></p-->
-        <div class="back">
-            <a href="/">マイページに戻る</a>
         </div>
     </body>
     <!-- ↓Googleマップに関するJavaScript記述 -->
@@ -41,8 +41,9 @@
         // 行きたいところ(観光地リスト)に追加した観光地名の格納用
         let place_list = [];
         let point_list = [];
-        const list_value = document.getElementById('list_value');
-        list_value.addEventListener('click', () => {
+        //const list_value = document.getElementById('list_value');
+        const direct_route = document.getElementById('direct_route')
+        direct_route.addEventListener('click', () => {
             var wayPoints = new Array();
             for (let i = 1; i < point_list.length-1; i++)
             {
@@ -50,7 +51,7 @@
             }
             request = {
                 origin: point_list[0],  // 出発地
-                destination: point_list[place_list.length-1],  // 到着地
+                destination: point_list[point_list.length-1],  // 到着地
                 avoidHighways: true, // 高速は利用しない
                 travelMode: google.maps.TravelMode.DRIVING, // 車モード
                 optimizeWaypoints: true, // 最適化を有効
@@ -59,9 +60,9 @@
             let json = JSON.stringify(request);
             const list_to_route = document.getElementById('list_to_route');
             list_to_route.value = json;
-            console.log(json);
-            //list_to_route.value = request;
-            //console.log(request);
+            //console.log(json);
+            ////list_to_route.value = request;
+            ////console.log(request);
         });
         
         /*function jsonSet()
@@ -80,8 +81,8 @@
             list_to_route.value = request;
         }*/
         
-        const route_btn = document.getElementById('route_direction');
-        /*const route_map = new google.maps.Map(
+        /*const route_btn = document.getElementById('route_direction');
+        const route_map = new google.maps.Map(
             document.getElementById("route_map"),
             {
                 center: { lat: 35.6810, lng: 139.7673 },
@@ -89,11 +90,11 @@
                 mapTypeId: "roadmap",
             }
         );*/
-        route_btn.addEventListener('click', () => {
-            var wayPoints = new Array();
-            /*place_list.forEach((spot) => {
-                wayPoints.push({location: spot});
-            });*/
+        //route_btn.addEventListener('click', () => {
+            /*var wayPoints = new Array();
+            //place_list.forEach((spot) => {
+            //    wayPoints.push({location: spot});
+            //});
             for (let i = 1; i < place_list.length-1; i++)
             {
                 wayPoints.push({location: place_list[i]});
@@ -130,8 +131,8 @@
                     } else {
                     alert('Directions 失敗(' + status + ')');
                     }
-                });	        
-        });
+                });     
+        });*/
         
         function initAutocomplete() {
             // マップの生成
