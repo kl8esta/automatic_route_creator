@@ -16,11 +16,11 @@
                 <p class="title__error" style="color:red">{{ $errors->first('route_post.title') }}</p>
             </div>
             <div style="display: flex;">
-                <div id="route_map" style="width: 500px; height: 350px;"></div>
-                <div id="route_panel" style="width: 500px; height: 350px; overflow: scroll;"></div>
+                <div id="route_map" style="width: 500px; height: 350px; margin: 10px 5px 5px 10px; padding: 5px;"></div>
+                <div id="route_panel" style="width: 500px; height: 350px; margin: 10px 10px 10px 5px; padding: 5px; overflow: scroll;"></div>
             </div>
-            <div class="json_data">
-                <p id="route_array">{{ $input_route }}</p>
+            <div class="json_data" type="text">
+                <p id="route_array" style="visibility:hidden;">{{ $input_route }}</p>
             </div>
             <div class="information">
                 <h4>補足情報(任意)</h4>
@@ -53,7 +53,7 @@
         <script>
         const route_array = document.getElementById('route_array');
         const original_data = JSON.parse(route_array.textContent);
-        console.log(original_data);
+        //console.log(original_data);
         function initMap() {
             const route_map = new google.maps.Map(
                 document.getElementById("route_map"),
@@ -67,7 +67,18 @@
             var directionsService = new google.maps.DirectionsService();
             // DirectionｓRenderer生成
             var directionsRenderer = new google.maps.DirectionsRenderer();
+            // const waypoint_marker = new google.maps.MarkerOptions();
             directionsRenderer.setPanel(document.getElementById('route_panel'));
+            /*directionsRenderer.setOptions({
+                suppressMarkers: false,
+                suppressPolylines: true,
+                suppressInfoWindows: false,
+                draggable: true,
+                preserveViewport: false,
+                markerOptions: {
+                    title: 'title'
+                },
+            });*/
             directionsRenderer.setMap(route_map);
             // ルート検索実行
             directionsService.route(original_data, function(response, status) {

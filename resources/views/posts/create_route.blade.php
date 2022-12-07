@@ -7,7 +7,7 @@
         <meta charset="utf-8">
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     </head>
-    <body>
+    <body style="padding: 20px">
         <h1>ルートガイド</h1>
         <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
         <div id="map" style="width: 700px; height: 500px;"></div>
@@ -31,7 +31,7 @@
             </div>
             <button type="submit" id="direct_route">ルートを作成</button>
         </form>
-        <p><a href="/posts/post_route">APIができるまではこのページをクリック</a></p>
+        <!--p><a href="/posts/post_route">APIができるまではこのページをクリック</a></p-->
         <div class="back">
             <a href="/">マイページに戻る</a>
         </div>
@@ -40,22 +40,23 @@
     <script>
         // 行きたいところ(観光地リスト)に追加した観光地名の格納用
         let place_list = [];
+        let point_list = [];
         const list_value = document.getElementById('list_value');
         list_value.addEventListener('click', () => {
             var wayPoints = new Array();
-            for (let i = 1; i < place_list.length-1; i++)
+            for (let i = 1; i < point_list.length-1; i++)
             {
-                wayPoints.push({location: place_list[i]});
+                wayPoints.push({location: point_list[i]});
             }
             request = {
-                origin: place_list[0],  // 出発地
-                destination: place_list[place_list.length-1],  // 到着地
+                origin: point_list[0],  // 出発地
+                destination: point_list[place_list.length-1],  // 到着地
                 avoidHighways: true, // 高速は利用しない
                 travelMode: google.maps.TravelMode.DRIVING, // 車モード
                 optimizeWaypoints: true, // 最適化を有効
                 waypoints: wayPoints // 経由地
             }
-            //let json = JSON.stringify(request);
+            let json = JSON.stringify(request);
             const list_to_route = document.getElementById('list_to_route');
             list_to_route.value = json;
             console.log(json);
@@ -244,12 +245,12 @@
                     marker.addListener("click", () => {
                         //マーカをクリックした際に表示するウィンドウのHTML記述
                         place_info[i] =
-                            '<div id="window_contents" style="width: 200px; height: 200px;">' +
+                            '<div id="window_contents" style="width: 250px; height: 200px;">' +
                             '<h3 id="firstHeading" class="firstHeading">'+
                             marker.getTitle() + 
                             "</h3>" + 
                             '<div id ="info" style="display: flex;">' +
-                            "<div>" +
+                            '<div style="margin: 5px">' +
                             "<img src=" + 
                             marker.picture +
                             ' width="100" height="100">' +
@@ -259,10 +260,10 @@
                             marker.total_reviews +  
                             "人のレビュー" + 
                             "</p></div>" +
-                            "<div>"+
+                            '<div style="margin: 5px;">'+
                             '<button id ="add_btn' + 
                             String(i) +
-                            '" type="button">目的地に追加</button><p>'+
+                            '" type="button" style="padding: 5px; margin: 5px">目的地に追加</button><p>'+
                             marker.address +
                             "</p></div></div>";  
                         //console.log(marker);
@@ -296,7 +297,8 @@
                                     if (place_list.indexOf(marker.getTitle())==-1)
                                     {
                                         // 観光地リストに追加
-                                        place_list.push(marker.getTitle());                                
+                                        place_list.push(marker.getTitle()); 
+                                        point_list.push(marker.getPosition());
                                     }
                                     
                                     // 一度pタグをすべて削除
