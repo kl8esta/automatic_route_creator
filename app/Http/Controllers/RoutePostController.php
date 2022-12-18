@@ -22,9 +22,12 @@ class RoutePostController extends Controller
     
     public function save_route(RoutePost $route_post, Request $request)
     {
-        $input_route = $request->list_json;
+        $input_route = $request['list_json'];
+        //$place_names = json_decode($request['list_name'], true);
+        $place_names = $request['list_name'];
+        //dd($place_names);
         $gapi = env('GOOGLE_MAPS_API_KEY'); 
-        return view('/posts/post_route')->with(['input_route' => $input_route, 'gapi' => $gapi]);
+        return view('/posts/post_route')->with(['place_names' => $place_names, 'input_route' => $input_route, 'gapi' => $gapi]);
     }
     
     public function save_form(RoutePost $route_post, RoutePostRequest $request)
