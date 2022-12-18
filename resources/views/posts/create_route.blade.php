@@ -16,15 +16,16 @@
             <div class="view_right" style="padding: 10px">
                 <h4>追加した観光地(回る順番は自動で決まります)</h4>
                 <h6>最大8か所追加できます(最初に出発地を入力してください)</h6>
-                <ul id="disp_list">
-                </ul>
                 <!--button id="delete_btn" style="from-green-400 to-blue-500">削除</button><-->
                 <!--button id="route_direction" style="from-green-400 to-blue-500">観光ルートを表示する</button-->
                 <!--button id="list_value" type="button" style="from-green-400 to-blue-500">試験用</button-->
                 <form action="/pre_posts" method="POST">
                     @csrf
+                    <ul id="disp_list">
+                    </ul>
                     <div class="json">
                         <input type="hidden" name="list_json" id="list_to_route"/>
+                        <input type="hidden" name="list_name" id="list_to_name"/>
                         <p class="title__error" style="color:red">{{ $errors->first('differ') }}</p>
                     </div>
                     <button type="submit" id="direct_route">ルートを作成</button>
@@ -44,11 +45,13 @@
         //const list_value = document.getElementById('list_value');
         const direct_route = document.getElementById('direct_route')
         direct_route.addEventListener('click', () => {
+            // 経由地の座標(緯度経度)を格納
             var wayPoints = new Array();
             for (let i = 1; i < point_list.length-1; i++)
             {
                 wayPoints.push({location: point_list[i]});
             }
+            // Direction API へのリクエスト作成
             request = {
                 origin: point_list[0],  // 出発地
                 destination: point_list[point_list.length-1],  // 到着地
@@ -57,10 +60,16 @@
                 optimizeWaypoints: true, // 最適化を有効
                 waypoints: wayPoints // 経由地
             }
+            // JSON化したリクエストをフォーム要素内に格納
             let json = JSON.stringify(request);
             const list_to_route = document.getElementById('list_to_route');
             list_to_route.value = json;
-            //console.log(json);
+            //地名の送信
+            let spot_names = JSON.stringify(place_list);
+            const list_to_name = document.getElementById('list_to_name');
+            list_to_name.value = spot_names;
+            //list_to_name.value = place_list;
+            ////console.log(json);
             ////list_to_route.value = request;
             ////console.log(request);
         });
@@ -314,6 +323,7 @@
                                         // pタグの情報
                                         //todoList.id = 'place'+ String(disp_list.childElementCount);
                                         pTag.id = 'place'+ String(i);
+                                        //pTag.name = "place_names[]";
                                         //todoList.textContent = marker.getTitle();
                                         pTag.textContent = place_list[i];
                                         // pタグ内に各観光地の削除ボタンを実装

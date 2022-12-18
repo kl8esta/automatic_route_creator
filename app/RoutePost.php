@@ -14,7 +14,7 @@ class RoutePost extends Model
         'information',
         'comment'
     ];
-    
+    //'route_order','route_time',
     protected $casts = [
         'route_json' => 'json',
     ];
