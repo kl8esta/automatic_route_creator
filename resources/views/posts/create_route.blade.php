@@ -365,7 +365,7 @@
                 
                 for(let i = 0; i < disp_list.childElementCount; i++)
                 {
-                    //pタグと削除ボタンタグを取得
+                    // pタグと削除ボタンタグを取得
                     place_ids.push(document.getElementById('place'+ String(i)));
                     del_listen = document.getElementById('btn'+ String(i));
                     // リストから対象要素を削除詰めするクリックイベントの追加
@@ -373,6 +373,8 @@
                         disp_list.removeChild(place_ids[i]);
                         delete place_list[i];
                         place_list = place_list.filter(Boolean);
+                        delete point_list[i];
+                        point_list = place_list.filter(Boolean);
                     })
                     delete_btns.push(del_listen);
                 }
