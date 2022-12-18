@@ -9,6 +9,9 @@
 * User Name: tester
 * E-Mail Address(login): tester@test
 * Password(login): test-test
+## デモ
+
+![github_readme1](https://user-images.githubusercontent.com/106045281/208305429-fa3a3a41-abb6-4e04-98be-f569c192190f.gif)
 ## 作成背景
 ### 問題点
 * あまり行ったことない都道府県の場合、どの観光スポットを回れば良いか分からない
