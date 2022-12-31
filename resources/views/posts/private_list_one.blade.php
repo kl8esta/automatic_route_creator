@@ -11,7 +11,7 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <link rel="stylesheet" href="/css/app.css">
     </head>
-    <body>
+    <body style="padding: 0 10px;">
         <p>
             <p><h1 class="header">未投稿ルート</h1></p>
             <p><h4 class="title">タイトル【{{ $route_post->title }}】</h4></p>
