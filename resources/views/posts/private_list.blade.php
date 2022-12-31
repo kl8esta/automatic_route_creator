@@ -3,7 +3,7 @@
 
 @section('content')
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <body>
+    <body style="padding: 0 10px;">
         <h1>マイルート一覧</h1>
         <h5>{{Auth::user()->name}}</h5>
         <p class='create' style="display:inline-block; padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px;">

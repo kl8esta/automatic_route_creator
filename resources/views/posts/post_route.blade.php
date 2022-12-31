@@ -6,12 +6,12 @@
     <head>
         <meta charset="utf-8">
     </head>
-    <body style="padding: 10px;">
-        <h1 "mergin: 10px">ルート投稿</h1>
+    <body style="padding: 0 10px;">
+        <h1 "margin: 10px">ルート投稿</h1>
         <form action="/posts" method="POST">
             @csrf
             <div class="title">
-                <h4 style="mergin: 10px">タイトル(必須)</h4>
+                <h4 style="margin: 10px">タイトル(必須)</h4>
                 <input type="text" name="route_post[title]" placeholder="このルートのタイトルは？" value="{{ old('route_post.title') }}"/>
                 <p class="title__error" style="color:red">{{ $errors->first('route_post.title') }}</p>
             </div>
@@ -48,10 +48,10 @@
             </div>
             <div class="post_option">
             </div>
-            <button type="submit" name="route_post[status_flag]" value="0">非公開する</button>
+            <button type="submit" name="route_post[status_flag]" value="0">マイルートに保存【非公開】</button>
             <button type="submit" name="route_post[status_flag]" value="1">公開する</button>
         </form>
-        <div class="back">
+        <div class="back" style="margin: 10px 0 0 0; font-size: 15px;">
             <p><a href="/posts/create_route">観光地の編集・追加</a></p>
         </div>
 
