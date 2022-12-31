@@ -162,15 +162,27 @@
                         return;
                     }
                     
-                    //// 各マーカーに付与する場所の情報(場所名, 平均評価, 総レビュー数，... 
-                    //// ...場所の写真, 住所, その他未実装)
+                    //// 各マーカーに付与する場所の情報(観光地名, 平均評価, 総レビュー数，... 
+                    //// ...観光地の写真, 住所, その他未実装)
+                    console.log(typeof(place.photos))
+                    console.log(place.name)
+                    
+                    let photo_info = ""
+                    // その観光地の写真情報がないとき、代わりに"No Image"を表示する
+                    if (place.photos == undefined) {
+                        //photo_info = "{{asset("storage/app/public/no_image.png")}}"
+                        photo_info = "{{asset("storage/no_image.png")}}"
+                    } else {
+                        photo_info = place.photos[0].getUrl();
+                    }
+                    
                     // マーカーの生成 + 観光地情報の追加
                     const marker = new google.maps.Marker({
                         map,
                         title: place.name, // 観光地名
                         stars: place.rating, // 平均レビュー
                         total_reviews: place.user_ratings_total, // レビュー数
-                        picture: place.photos[0].getUrl(), // ユーザー投稿写真
+                        picture: photo_info, // ユーザー投稿写真
                         address: place.formatted_address, // 住所
                         attributions: place.html_attributions[0],
                         url: place.url,
