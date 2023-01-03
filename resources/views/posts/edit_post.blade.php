@@ -8,12 +8,12 @@
     </head>
     <body style="padding: 0 10px;">
         <h1>ルート投稿</h1>
-        <form action="/posts/{{ $route_post->id }}" method="POST">
+        <form action="/posts/{{ $route_post->id }}" method="POST" onsubmit="return preValidation()">
             @csrf
             @method('PUT')
             <div class="title">
                 <h4>タイトル(必須)</h4>
-                <input type="text" name="route_post[title]" placeholder="このルートのタイトルは？" value="{{ $route_post->title }}"/>
+                <input type="text" name="route_post[title]" id="in_title" placeholder="このルートのタイトルは？" value="{{ $route_post->title }}"/>
                 <p class="title__error" style="color:red">{{ $errors->first('route_post.title') }}</p>
             </div>
             <div class="route_map">
@@ -47,5 +47,14 @@
         </div>
 
     </body>
+    <script>
+        function preValidation() {
+            in_title = document.getElementById('in_title');
+            if (in_title.value === "") {
+                alert('タイトルを入力して下さい');
+                return false;
+            }
+        }
+    </script>
 </html>
 @endsection

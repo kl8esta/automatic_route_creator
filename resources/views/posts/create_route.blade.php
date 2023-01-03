@@ -20,7 +20,7 @@
                 <!--button id="delete_btn" style="from-green-400 to-blue-500">削除</button><-->
                 <!--button id="route_direction" style="from-green-400 to-blue-500">観光ルートを表示する</button-->
                 <!--button id="list_value" type="button" style="from-green-400 to-blue-500">試験用</button-->
-                <form action="/pre_posts" method="POST">
+                <form action="/pre_posts" method="POST" onsubmit="return checkArrayLength()">
                     @csrf
                     <ul id="disp_list">
                     </ul>
@@ -100,6 +100,14 @@
             //-console.log(request);
         });
         
+        // form送信で観光地リストの要素が1のみの場合は、飛ばさないようにする
+        function checkArrayLength() {
+            if (place_list.length <= 1) {
+                alert('観光地を2つ以上追加してください');
+                return false;
+            }
+        }
+        
         //// Googleマップ上の処理を常時行うための関数
         function initAutocomplete() {
             // マップの生成
@@ -164,9 +172,8 @@
                     
                     //// 各マーカーに付与する場所の情報(観光地名, 平均評価, 総レビュー数，... 
                     //// ...観光地の写真, 住所, その他未実装)
-                    console.log(typeof(place.photos))
-                    console.log(place.name)
-                    
+                        //console.log(typeof(place.photos))
+                        //console.log(place.name)
                     let photo_info = ""
                     // その観光地の写真情報がないとき、代わりに"No Image"を表示する
                     if (place.photos == undefined) {
@@ -287,7 +294,7 @@
                                     if (place_list.indexOf(marker.getTitle())==-1) {
                                         // 観光地名を観光地リスト追加
                                         place_list.push(marker.getTitle()); 
-                                        // 観光地座標
+                                        // 観光地座標も追加
                                         point_list.push(marker.getPosition());
                                     }
                                     
@@ -321,7 +328,7 @@
                 　                   }
                 　               // 9個以上追加できないようにする
                 　               else {
-                　                   window.confirm('目的地は(出発地を含めて)8個までです')
+            　                       alert('観光地リストに入れられるのは8個までです');
                 　               }
                 　               
                 　               // 追加した観光地をリストから削除するボタンの有効化

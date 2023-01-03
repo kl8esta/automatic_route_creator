@@ -15,12 +15,12 @@
         <div class='own_posts'>
             @foreach ($own_posts as $route_post)
                 <div class='route_post'>
-                    @if($route_post->status_flag == 0)
+                    @if ($route_post->status_flag == 0)
                         <a href="/posts/private_list/{{ $route_post->id}}">
                             <h4>(非公開)タイトル【{{ $route_post->title}}】</h4>
                         </a>
                     @else
-                        <a href="/posts/public_list/{{ $route_post->id}}">
+                        <a href="/posts/private_list/{{ $route_post->id}}">
                             <h4>(公開済み)タイトル【{{ $route_post->title}}】</h4>
                         </a>
                     @endif
@@ -30,6 +30,9 @@
             @endforeach
         </div>
         <div class='paginate'>{{ $own_posts->links() }}</div>
+        <div class="home_back" style="margin: 30px 0 0 0; font-size: 15px;">
+            <p><a href="/">マイページに戻る</a></p>
+        </div>
     </body>
 </html>
 @endsection

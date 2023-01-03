@@ -6,6 +6,7 @@ use App\RoutePost;
 use Illuminate\Http\Request;
 use App\Http\Requests\RoutePostRequest;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class RoutePostController extends Controller
 {
@@ -15,23 +16,36 @@ class RoutePostController extends Controller
         return view('posts/create_route')->with(['gapi' => $gapi]);
     }
     
-    public function post_route()
+    public function post_route(Request $request)
     {
+        $gapi = env('GOOGLE_MAPS_API_KEY'); 
+        // バリデーションエラーなどでリロードされるとsave_route()で送った...
+        // ...セッションデータがなくなるので再生成
+        if (!($request->session()->has('gapi'))) {
+            //dd($request->session());
+            session(['gapi' => $gapi]);
+        }
         return view('posts/post_route');
     }
     
     public function save_route(RoutePost $route_post, Request $request)
     {
         $input_route = $request['list_json'];
+        $input_route = json_decode($request['list_json'], true);
+        //dd($input_route);
         //$place_names = json_decode($request['list_name'], true);
         $place_names = $request['list_name'];
         //dd($place_names);
         $gapi = env('GOOGLE_MAPS_API_KEY'); 
-        return view('/posts/post_route')->with(['place_names' => $place_names, 'input_route' => $input_route, 'gapi' => $gapi]);
+        return redirect('/posts/post_route')->with(['place_names' => $place_names, 'input_route' => $input_route, 'gapi' => $gapi]);
+        /*return redirect()->route('posts.post_route')->with(['place_names' => $place_names, 'input_route' => $input_route, 
+                    'gapi' => $gapi
+                ]);*/
     }
     
     public function save_form(RoutePost $route_post, RoutePostRequest $request)
     {
+        //dd($request->all());
         $input = $request['route_post'];
         $input += ['user_id' => $request->user()->id];
         $input += ['route_json' => '{ "name": "Tanaka" }'];
@@ -57,6 +71,10 @@ class RoutePostController extends Controller
     
     public function private_list_one(RoutePost $route_post)
     {
+        //dd(Auth::id()==$route_post['user_id']);
+        if (Auth::id()!=$route_post['user_id']) {
+            return redirect('/');
+        }
         //$posted_user = User::where('name','=',$route_post['user_id'])->first();
         $posted_user = DB::table('users')->where('id',$route_post['user_id'])->value('name');
         //dd($posted_user);

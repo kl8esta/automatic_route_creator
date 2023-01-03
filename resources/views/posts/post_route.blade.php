@@ -8,24 +8,24 @@
     </head>
     <body style="padding: 0 10px;">
         <h1 "margin: 10px">ルート投稿</h1>
-        <form action="/posts" method="POST">
+        <form action="/posts" method="POST" onsubmit="return preValidation()">
             @csrf
             <div class="title">
                 <h4 style="margin: 10px">タイトル(必須)</h4>
-                <input type="text" name="route_post[title]" placeholder="このルートのタイトルは？" value="{{ old('route_post.title') }}"/>
+                <input type="text" name="route_post[title]" id="in_title" placeholder="このルートのタイトルは？" value="{{ old('route_post.title') }}"/>
                 <p class="title__error" style="color:red">{{ $errors->first('route_post.title') }}</p>
             </div>
             <div class="visit" style="width: 800px">
-                <!--input type="hidden" name="route_post[title]" value="{{ $place_names }}"/-->
-                <h4 type="text" id="visit_info" name="route_post[route_order]"></h4>
-                <h4 type="text" id="visit_time" name="route_post[route_time]"></h4>
+                <!--input type="hidden" name="route_post[title]" value="{ $place_names }}"/-->
+                <h4 type="text" id="visit_info"></h4>
+                <h4 type="text" id="visit_time"></h4>
             </div>
             <div style="display: flex;">
                 <div id="route_map" style="width: 500px; height: 350px; margin: 10px 5px 5px 10px; padding: 5px;"></div>
                 <div id="route_panel" style="width: 500px; height: 350px; margin: 10px 10px 10px 5px; padding: 5px; overflow: scroll;"></div>
             </div>
             <div class="json_data" type="text">
-                <p id="route_array" style="visibility:hidden;">{{ $input_route }}</p>
+                <!--p id="route_array" style="visibility:hidden;"> session('input_route') </p-->
                 <!--p type="hidden" id="route_array"></p-->
             </div>
             <div class="information">
@@ -57,16 +57,22 @@
 
     </body>
         <script>
-        const visit_order_json = @json($place_names);
-        //const visit_order = "{{$place_names}}";
+            //console.log json_decode session'input_route'), JSON_UNESCAPED_UNICODE) }});
+            //const visit_order_json = json$place_names);
+            //const visit_order = "{$place_names}}";
+        //// 観光ルートの地名の表示
+        // 観光地リストの地名取得
+        const visit_order_json = @json(session('place_names'));
         const visit_order = JSON.parse(visit_order_json);
-        //console.log(visit_order);
-        //console.log(visit_order[0]);
+        
+        // 観光順番のアルファベット生成
         let alphabets = []
         for (let i = 'A'.charCodeAt(0); i <= 'Z'.charCodeAt(0); i++) 
         {
             alphabets.push(String.fromCharCode([i]))
         }
+        
+        // 観光ルートの順番テキストを生成
         let visit_numbers = "";
         for (let i = 0; i < visit_order.length; i++) 
         {
@@ -76,12 +82,24 @@
                 visit_numbers += "[" + alphabets[i] + "]：" + visit_order[i] + "→ ";
             } 
         }
+        
+        // 観光ルートをbladeに表示
         const visit_info = document.getElementById('visit_info');
         visit_info.textContent = visit_numbers;
+        
+        //// 観光ルートのマップ表示
+        // 前ページからの Direction API リクエストの取得
         const route_array = document.getElementById('route_array');
-        const original_data = JSON.parse(route_array.textContent);
-        //console.log(original_data);
+            //const original_data = JSON.parse(route_array.textContent);
+            //const original_data = @json(session()->get('input_route'));
+            //console.log//jsonkakko//input_route));
+            //const encode_data = @json(session('input_route'));
+            //const original_data = JSON.parse(encode_data);
+        const original_data = @json(session('input_route'));
+        
+        // Googleマップ上の処理を常時行うための関数
         function initMap() {
+            // 初回の表示マップの設定オプション
             const route_map = new google.maps.Map(
                 document.getElementById("route_map"),
                 {
@@ -90,33 +108,44 @@
                     mapTypeId: "roadmap",
                 }
             );
-            // DirectionsService生成
-            var directionsService = new google.maps.DirectionsService();
-            // DirectionｓRenderer生成
-            var directionsRenderer = new google.maps.DirectionsRenderer();
+            
+            // Directions APIの起動
+            let directionsService = new google.maps.DirectionsService();
+            
+            // マップ描画機能の起動
+            let directionsRenderer = new google.maps.DirectionsRenderer();
             // const waypoint_marker = new google.maps.MarkerOptions();
+            
+            // ルートナビの起動
             directionsRenderer.setPanel(document.getElementById('route_panel'));
-            /*directionsRenderer.setOptions({
-                suppressMarkers: false,
-                suppressPolylines: true,
-                suppressInfoWindows: false,
-                draggable: true,
-                preserveViewport: false,
-                markerOptions: {
-                    title: 'title'
-                },
-            });*/
+                /*directionsRenderer.setOptions({
+                    suppressMarkers: false,
+                    suppressPolylines: true,
+                    suppressInfoWindows: false,
+                    draggable: true,
+                    preserveViewport: false,
+                    markerOptions: {
+                        title: 'title'
+                    },
+                });*/
+                
+            // マップの起動
             directionsRenderer.setMap(route_map);
-            // ルート検索実行
+            
+            // 観光ルートの計算
             directionsService.route(original_data, function(response, status) {
-                //console.log(response);
+                // Direction APIレスポンスの状態確認
                 if (status === google.maps.DirectionsStatus.OK) {
+                    // マップに観光ルートを描画する
                     directionsRenderer.setDirections(response);
-                    
-                    // 移動距離、所要時間の計算
+                    console.log(response);
+                    //// 観光ルートの移動距離、所要時間の計算
+                    // 観光地から観光地の距離・時間の情報を取得
                     let route_res = response.routes[0].legs;
                     //console.log(response.routes[0]);
                     //console.log(legs);
+                    
+                    // 移動距離時間の合計
                     let dist_meter = 0;
                     let time_sec = 0;
                     route_res.forEach((res) => {
@@ -124,9 +153,11 @@
                         dist_meter += res.distance.value;
                         time_sec += res.duration.value;
                     });
+                    
                     // メートル => キロメートルに変換
                     let dist_kmeter = Math.round(dist_meter / 100) / 10;
                     let km_str = "移動距離：約" + String(dist_kmeter) + "km";
+                    
                     // 秒 => 日/時間/分に変換
                     let time_str = "";
                     let time_day = Math.floor(time_sec / 86400);
@@ -142,16 +173,27 @@
                         + String(time_min) + "分";
                     }
                     //console.log("総移動距離=" + dist_kmeter + ", 総所要時間=" + time_hour);
+                    
+                    // 総移動距離と総所要時間をbladeに表示
                     const visit_time = document.getElementById('visit_time');
                     visit_time.textContent = km_str +" / " + time_str ;
                 } else {
-                    alert('Directions 失敗(' + status + ')');
+                    alert('観光ルートを表示できませんでした。前ページからもう一度お願いします。(' + status + ')');
                     }
             });	 
         }
         window.initMap = initMap;
+        
+        // タイトルが入力されているかの確認
+        function preValidation() {
+            in_title = document.getElementById('in_title');
+            if (in_title.value === "") {
+                alert('タイトルを入力して下さい');
+                return false;
+            }
+        }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ $gapi }}&callback=initMap&libraries=geometry" defer>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ session('gapi') }}&callback=initMap&libraries=geometry" defer>
     </script>
 </html>
 @endsection

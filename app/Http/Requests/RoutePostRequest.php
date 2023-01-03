@@ -25,7 +25,7 @@ class RoutePostRequest extends FormRequest
     public function rules()
     {
         return [
-            'route_post.title' => 'required|string|max:100',
+            'route_post.title' => 'required|string|max:100'
         ];
     }
 }
