@@ -14,17 +14,22 @@
         </p>
         <div class='route_posts'>
             @foreach ($route_posts as $route_post)
-                <div class='route_post'>
-                    <a href="/posts/public_list/{{ $route_post->id}}">
-                        <h4>タイトル【{{ $route_post->title}}】</h4>
-                    </a>
-                    <small>投稿者【{{ $route_post->user->name }}】</small>
-                    <p class='spot_name'>観光ルート【a → b → c】</p>
-                    <p class="updated_at">最終更新【{{ $route_post->updated_at }}】</p>
-                </div>
+                @if($route_post->status_flag == 1)
+                    <div class='route_post'>
+                        <a href="/posts/public_list/{{ $route_post->id}}">
+                            <h4>タイトル【{{ $route_post->title}}】</h4>
+                        </a>
+                        <small>投稿者【{{ $route_post->user->name }}】</small>
+                        <p class='spot_name'>観光ルート【a → b → c】</p>
+                        <p class="updated_at">最終更新【{{ $route_post->updated_at }}】</p>
+                    </div>
+                @endif
             @endforeach
         </div>
         <div class='paginate'>{{ $route_posts->links() }}</div>
+        <div class="home_back" style="margin: 30px 0 0 0; font-size: 15px;">
+            <p><a href="/">マイページに戻る</a></p>
+        </div>
     </body>
 </html>
 @endsection
