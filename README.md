@@ -6,6 +6,7 @@
 * 作成されたルートを公開し、実際に観光してみた感想や、道路情報などをSNS形式で投稿
 * 他の人が作成したルートを観光時の参考にしたり、いいね評価をすることが可能
 ## テストアカウント
+* 【本番環境】https://automatic-route-creator.herokuapp.com/login
 * User Name: tester
 * E-Mail Address(login): tester@test
 * Password(login): test-test
