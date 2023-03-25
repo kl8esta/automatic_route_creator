@@ -17,7 +17,8 @@
             </div>
             <div class="visit" style="width: 800px">
                 <!--input type="hidden" name="route_post[title]" value="{ $place_names }}"/-->
-                <h4 type="text" id="visit_info"></h4>
+                <h4>巡る観光地</h4>
+                <h4 type="text" id="visit_info" style="display:inline-block; padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px;"></h4>
                 <h4 type="text" id="visit_time"></h4>
             </div>
             <div style="display: flex;">
@@ -65,11 +66,11 @@
         const visit_order_json = @json(session('place_names'));
         const visit_order = JSON.parse(visit_order_json);
         
-        // 観光順番のアルファベット生成
-        let alphabets = []
+        /*// 観光順番のアルファベット生成
+        let alphabets = [];
         for (let i = 'A'.charCodeAt(0); i <= 'Z'.charCodeAt(0); i++) 
         {
-            alphabets.push(String.fromCharCode([i]))
+            alphabets.push(String.fromCharCode([i]));
         }
         
         // 観光ルートの順番テキストを生成
@@ -80,6 +81,17 @@
                 visit_numbers += "[" + alphabets[i] + "]：" + visit_order[i];
             } else {
                 visit_numbers += "[" + alphabets[i] + "]：" + visit_order[i] + "→ ";
+            } 
+        }*/
+        
+        // 観光ルートに表示する地名リストを生成
+        let visit_numbers = "";
+        for (let i = 0; i < visit_order.length; i++) 
+        {
+            if (i == 0) {
+                visit_numbers += visit_order[i];
+            } else {
+                visit_numbers += " / " + visit_order[i];
             } 
         }
         
@@ -138,7 +150,7 @@
                 if (status === google.maps.DirectionsStatus.OK) {
                     // マップに観光ルートを描画する
                     directionsRenderer.setDirections(response);
-                    console.log(response);
+                    
                     //// 観光ルートの移動距離、所要時間の計算
                     // 観光地から観光地の距離・時間の情報を取得
                     let route_res = response.routes[0].legs;
@@ -180,7 +192,7 @@
                 } else {
                     alert('観光ルートを表示できませんでした。前ページからもう一度お願いします。(' + status + ')');
                     }
-            });	 
+            });
         }
         window.initMap = initMap;
         
@@ -193,7 +205,7 @@
             }
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ session('gapi') }}&callback=initMap&libraries=geometry" defer>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ session('gapi') }}&callback=initMap&libraries=places,geometry" defer>
     </script>
 </html>
 @endsection
