@@ -13,20 +13,24 @@
     <body style="padding: 0 10px;">
         <p>
             <p><h1 class="header">公開済みルート</h1></p>
-            <p><h4 class="title">タイトル【{{ $route_post->title }}】</h4></p>
-        <p>
-            <h5 class="publisher">ユーザー【{{ $posted_user }}】</h5>
-            <h5 class="updated_at">最終更新【{{ $route_post->updated_at }}】</h5>
+            <p><h4 class="title" style="margin: 10px;">タイトル【{{ $route_post->title }}】</h4></p>
         </p>
+        <div style="margin: 10px;">
+            <h5 class="publisher">ユーザー【{{ $posted_user }}】</h5>
+            <h5 class="updated_at">最終更新【{{ date('Y/m/d', strtotime($route_post->updated_at)) }}】</h5>
+        </div>
         <div class="content">
-            <div class="spot_names">
-                <h5>観光ルート【a → b → c】</h5>
+            <div class="spot_names" style="margin: 20px 0 10px 10px;">
+                <h5 style="display:inline-block; padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px;">
+                    巡る場所：{{$route_post->tour_list}}
+                </h5>
+                <h5>{{$route_post->duration}}</h5>
             </div>
-            <div class="post_information">
+            <div class="post_information" style="margin: 20px 0 10px 10px;">
                 <h5>補足情報</h5>
                 <p>{{ $route_post->information }}</p>
             </div>
-            <div class="post_comment">
+            <div class="post_comment" style="margin: 20px 0 10px 10px;">
                 <h5>感想</h5>
                 <p>{{ $route_post->comment }}</p>
             </div>
