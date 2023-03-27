@@ -48,7 +48,7 @@ class RoutePostController extends Controller
         //dd($request->all());
         $input = $request['route_post'];
         $input += ['user_id' => $request->user()->id];
-        $input += ['route_json' => '{ "name": "Tanaka" }'];
+        //$input += ['route_json' => '{ "name": "Tanaka" }'];
         $route_post->fill($input)->save();
         if ($route_post->status_flag == 0)
         {
