@@ -218,7 +218,7 @@
             }
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ session('gapi') }}&callback=initMap&libraries=places,geometry" defer>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap&libraries=places,geometry" defer>
     </script>
 </html>
 @endsection

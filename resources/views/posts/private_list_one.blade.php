@@ -27,6 +27,10 @@
                 </h5>
                 <h5>{{$route_post->duration}}</h5>
             </div>
+            <div style="display: flex;">
+                <div id="route_map" style="width: 500px; height: 350px; margin: 10px 5px 5px 10px; padding: 5px;"></div>
+                <div id="route_panel" style="width: 500px; height: 350px; margin: 10px 10px 10px 5px; padding: 5px; overflow: scroll;"></div>
+            </div>
             <div class="post_information" style="margin: 20px 0 10px 10px;">
                 <h5>補足情報</h5>
                 <p>{{ $route_post->information }}</p>
@@ -57,6 +61,50 @@
                 document.getElementById(`form_${id}`).submit();
             }
         }
+        
+        // Direction API レスポンスの受け取り
+        const response = JSON.parse(@json($route_post->route_json));
+        
+        // Googleマップ上の処理を常時行うための関数
+        function initMap() {
+            // 初回の表示マップの設定オプション
+            const route_map = new google.maps.Map(
+                document.getElementById("route_map"),
+                {
+                    center: { lat: 35.6810, lng: 139.7673 },
+                    zoom: 13,
+                    mapTypeId: "roadmap",
+                }
+            );
+            
+            // Directions APIの起動
+            let directionsService = new google.maps.DirectionsService();
+            
+            // マップ描画機能の起動
+            let directionsRenderer = new google.maps.DirectionsRenderer();
+            // const waypoint_marker = new google.maps.MarkerOptions();
+            
+            // ルートナビの起動
+            directionsRenderer.setPanel(document.getElementById('route_panel'));
+                /*directionsRenderer.setOptions({
+                    suppressMarkers: false,
+                    suppressPolylines: true,
+                    suppressInfoWindows: false,
+                    draggable: true,
+                    preserveViewport: false,
+                    markerOptions: {
+                        title: 'title'
+                    },
+                });*/
+                
+            // マップの起動
+            directionsRenderer.setMap(route_map);
+            // マップに観光ルートを描画する
+            directionsRenderer.setDirections(response);
+        }
+        window.initMap = initMap;
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap&libraries=places,geometry" defer>
     </script>
 </html>
 @endsection

@@ -19,8 +19,8 @@ class RoutePostController extends Controller
     public function post_route(Request $request)
     {
         $gapi = env('GOOGLE_MAPS_API_KEY'); 
-        // バリデーションエラーなどでリロードされるとsave_route()で送った...
-        // ...セッションデータがなくなるので再生成
+        // バリデーションエラーなどでリロードされるとsave_route()で送った
+        // セッションデータがなくなるので再生成
         if (!($request->session()->has('gapi'))) {
             //dd($request->session());
             session(['gapi' => $gapi]);
@@ -32,10 +32,8 @@ class RoutePostController extends Controller
     {
         $input_route = $request['list_json'];
         $input_route = json_decode($request['list_json'], true);
-        //dd($input_route);
         //$place_names = json_decode($request['list_name'], true);
         $place_names = $request['list_name'];
-        //dd($place_names);
         $gapi = env('GOOGLE_MAPS_API_KEY'); 
         return redirect('/posts/post_route')->with(['place_names' => $place_names, 'input_route' => $input_route, 'gapi' => $gapi]);
         /*return redirect()->route('posts.post_route')->with(['place_names' => $place_names, 'input_route' => $input_route, 
@@ -45,7 +43,7 @@ class RoutePostController extends Controller
     
     public function save_form(RoutePost $route_post, RoutePostRequest $request)
     {
-        //dd($request->all());
+        $gapi = env('GOOGLE_MAPS_API_KEY'); 
         $input = $request['route_post'];
         $input += ['user_id' => $request->user()->id];
         //$input += ['route_json' => '{ "name": "Tanaka" }'];
@@ -58,7 +56,6 @@ class RoutePostController extends Controller
         {
             return redirect('/posts/public_list/' . $route_post->id);
         }
-        //dd($request->all());
     }
     
     public function public_list_one(RoutePost $route_post)
