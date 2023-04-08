@@ -391,7 +391,7 @@
         window.initAutocmplete = initAutocomplete;
         
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ $gapi }}&callback=initAutocomplete&libraries=places,geometry" defer>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initAutocomplete&libraries=places,geometry" defer>
     </script>
 </html>
 @endsection

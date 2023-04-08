@@ -12,7 +12,9 @@ class RoutePost extends Model
         'route_json',
         'status_flag',
         'information',
-        'comment'
+        'comment',
+        'tour_list',
+        'duration'
     ];
     //'route_order','route_time',
     protected $casts = [
