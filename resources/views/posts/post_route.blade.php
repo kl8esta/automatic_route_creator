@@ -17,8 +17,12 @@
             </div>
             <div class="visit" style="width: 800px">
                 <!--input type="hidden" name="route_post[title]" value="{ $place_names }}"/-->
-                <h4 type="text" id="visit_info"></h4>
+                <h4>巡る観光地</h4>
+                <h4 type="text" id="visit_info" style="display:inline-block; padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px;"></h4>
                 <h4 type="text" id="visit_time"></h4>
+                <input type="hidden" name="route_post[tour_list]" id="in_list"/>
+                <input type="hidden" name="route_post[route_json]" id="in_route"/>                
+                <input type="hidden" name="route_post[duration]" id="in_duration"/>
             </div>
             <div style="display: flex;">
                 <div id="route_map" style="width: 500px; height: 350px; margin: 10px 5px 5px 10px; padding: 5px;"></div>
@@ -65,11 +69,11 @@
         const visit_order_json = @json(session('place_names'));
         const visit_order = JSON.parse(visit_order_json);
         
-        // 観光順番のアルファベット生成
-        let alphabets = []
+        /*// 観光順番のアルファベット生成
+        let alphabets = [];
         for (let i = 'A'.charCodeAt(0); i <= 'Z'.charCodeAt(0); i++) 
         {
-            alphabets.push(String.fromCharCode([i]))
+            alphabets.push(String.fromCharCode([i]));
         }
         
         // 観光ルートの順番テキストを生成
@@ -81,9 +85,20 @@
             } else {
                 visit_numbers += "[" + alphabets[i] + "]：" + visit_order[i] + "→ ";
             } 
+        }*/
+        
+        // 観光ルートに表示する地名リストを生成
+        let visit_numbers = "";
+        for (let i = 0; i < visit_order.length; i++) 
+        {
+            if (i == 0) {
+                visit_numbers += visit_order[i];
+            } else {
+                visit_numbers += " / " + visit_order[i];
+            } 
         }
         
-        // 観光ルートをbladeに表示
+        // 地名リストをbladeに表示
         const visit_info = document.getElementById('visit_info');
         visit_info.textContent = visit_numbers;
         
@@ -139,25 +154,18 @@
                     // マップに観光ルートを描画する
                     directionsRenderer.setDirections(response);
                     console.log(response);
-                    //// 観光ルートの移動距離、所要時間の計算
-                    // 観光地から観光地の距離・時間の情報を取得
+                    
+                    //// 観光ルートの所要時間・移動時間の計算
+                    // 観光地から観光地への時間・距離の情報を取得
                     let route_res = response.routes[0].legs;
-                    //console.log(response.routes[0]);
-                    //console.log(legs);
-                    
-                    // 移動距離時間の合計
-                    let dist_meter = 0;
+                    // 移動時間・移動距離の合計
                     let time_sec = 0;
+                    let dist_meter = 0;
                     route_res.forEach((res) => {
-                        //console.log(res);
+                        // console.log(res);
+                        time_sec += res.duration.value;                    
                         dist_meter += res.distance.value;
-                        time_sec += res.duration.value;
                     });
-                    
-                    // メートル => キロメートルに変換
-                    let dist_kmeter = Math.round(dist_meter / 100) / 10;
-                    let km_str = "移動距離：約" + String(dist_kmeter) + "km";
-                    
                     // 秒 => 日/時間/分に変換
                     let time_str = "";
                     let time_day = Math.floor(time_sec / 86400);
@@ -172,15 +180,32 @@
                         time_str = "所要時間：約" + String(time_hour) + "時間" 
                         + String(time_min) + "分";
                     }
-                    //console.log("総移動距離=" + dist_kmeter + ", 総所要時間=" + time_hour);
                     
-                    // 総移動距離と総所要時間をbladeに表示
+                    // メートル => キロメートルに変換
+                    let dist_kmeter = Math.round(dist_meter / 100) / 10;
+                    let km_str = "移動距離：約" + String(dist_kmeter) + "km";
+                    //console.log(総所要時間=" + time_hour, "総移動距離=" + dist_kmeter + ");
+                    
+                    // 総移動時間と総所要距離をbladeに表示
+                    let time_dist = time_str +" / " + km_str;
                     const visit_time = document.getElementById('visit_time');
-                    visit_time.textContent = km_str +" / " + time_str ;
+                    visit_time.textContent = time_dist;
+                    
+                    //// タグへの埋め込み(form転送)
+                    // 地名リスト
+                    const in_list = document.getElementById('in_list');
+                    in_list.value = visit_numbers;
+                    // ルート(ナビ)情報
+                    const in_route = document.getElementById('in_route');
+                    in_route.value = JSON.stringify(response);
+                    // 所要時間
+                    const in_duration= document.getElementById('in_duration');
+                    in_duration.value = time_dist;          
+                    
                 } else {
                     alert('観光ルートを表示できませんでした。前ページからもう一度お願いします。(' + status + ')');
                     }
-            });	 
+            });
         }
         window.initMap = initMap;
         
@@ -193,7 +218,7 @@
             }
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ session('gapi') }}&callback=initMap&libraries=geometry" defer>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap&libraries=places,geometry" defer>
     </script>
 </html>
 @endsection
