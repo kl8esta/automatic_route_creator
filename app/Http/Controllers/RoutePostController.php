@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\RoutePost;
+use App\Favorite;
 use Illuminate\Http\Request;
 use App\Http\Requests\RoutePostRequest;
 use Illuminate\Support\Facades\DB;
@@ -10,12 +11,14 @@ use Auth;
 
 class RoutePostController extends Controller
 {
+    # ルート作成ページの表示
     public function create_route()
     {   
         $gapi = env('GOOGLE_MAPS_API_KEY'); 
         return view('posts/create_route')->with(['gapi' => $gapi]);
     }
     
+    # ルート投稿ページの表示
     public function post_route(Request $request)
     {
         $gapi = env('GOOGLE_MAPS_API_KEY'); 
@@ -28,6 +31,7 @@ class RoutePostController extends Controller
         return view('posts/post_route');
     }
     
+    # ルート作成リクエスト
     public function save_route(RoutePost $route_post, Request $request)
     {
         $input_route = $request['list_json'];
@@ -41,6 +45,7 @@ class RoutePostController extends Controller
                 ]);*/
     }
     
+    # ルート投稿(DB保存)
     public function save_form(RoutePost $route_post, RoutePostRequest $request)
     {
         $gapi = env('GOOGLE_MAPS_API_KEY'); 
@@ -58,6 +63,7 @@ class RoutePostController extends Controller
         }
     }
     
+    # 公開ルート詳細ページの表示
     public function public_list_one(RoutePost $route_post)
     {
         //$posted_user = User::where('name','=',$route_post['user_id'])->first();
@@ -66,33 +72,36 @@ class RoutePostController extends Controller
         return view('posts/public_list_one')->with(['route_post' => $route_post, 'posted_user' => $posted_user]);
     }
     
+    # マイルート詳細ページの表示
     public function private_list_one(RoutePost $route_post)
     {
-        //dd(Auth::id()==$route_post['user_id']);
+        # ユーザが他ユーザのマイルートページに入らないようにする
         if (Auth::id()!=$route_post['user_id']) {
             return redirect('/');
         }
         //$posted_user = User::where('name','=',$route_post['user_id'])->first();
         $posted_user = DB::table('users')->where('id',$route_post['user_id'])->value('name');
-        //dd($posted_user);
         return view('posts/private_list_one')->with(['route_post' => $route_post, 'posted_user' => $posted_user]);
     }
     
-    public function show_public_list(RoutePost $route_post)
+    # 公開ルート一覧ページの表示
+    public function show_public_list(RoutePost $route_post, Favorite $favorite)
     {
-        return view('posts/public_list')->with(['route_posts' => $route_post->getPaginateByLimit()]);
+        $send = [
+            'route_posts' => $route_post->getPaginateByLimit(),
+            'favorite' => $favorite,
+            ];
+        
+        return view('posts/public_list')->with($send);        
     }
     
-    /*public function show_private_list(RoutePost $route_post)
-    {
-        return view('posts/private_list')->with(['route_posts' => $route_post->getPaginateByLimit()]);
-    }*/
-    
+    # ルート投稿の編集
     public function editPost(RoutePost $route_post)
     {
         return view('posts/edit_post')->with(['route_post' => $route_post]);
     }
     
+    # ルート投稿更新(DB更新)
     public function updatePost(RoutePost $route_post, RoutePostRequest $request)
     {
         $input = $request['route_post'];
@@ -109,6 +118,7 @@ class RoutePostController extends Controller
         }
     }
     
+    # ルート投稿削除(DB除外)
     public function delete(RoutePost $route_post)
     {
         $route_post->delete();

@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth']], function(){
     // 公開ルートの一覧ページ＆詳細ページ
     Route::get('/posts/private_list', 'UserController@show_private_list');
     Route::get('/posts/private_list/{route_post}', 'RoutePostController@private_list_one');
-
+    Route::post('/ajaxfav', 'FavoriteController@ajaxfav');
     // マイルートの編集・更新form送信・削除のルーティング
     Route::get('/posts/{route_post}/edit', 'RoutePostController@editPost');
     Route::put('/posts/{route_post}', 'RoutePostController@updatePost');
