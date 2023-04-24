@@ -40,11 +40,15 @@ class User extends Authenticatable
     
     public function getOwnPaginateByLimit(int $limit_count = 5)
     {
-        return $this::with('routePosts')->find(Auth::id())->routePosts()->orderBy('updated_at', 'DESC')->paginate($limit_count);
+        return $this::with('routePosts')->find(Auth::id())->routePosts()->withCount('favorites')->orderBy('updated_at', 'DESC')->paginate($limit_count);
     }
     
     public function routePosts()
     {
         return $this->hasMany('App\RoutePost');
+    }
+    public function favorites()
+    {
+        return $this->hasMany('App\Favorite');
     }
 }

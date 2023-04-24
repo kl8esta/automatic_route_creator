@@ -1,0 +1,10 @@
+.user_name,.spot_name,.duration,.post_comment {
+    margin: 0 0 10px 10px;
+}
+
+.updated_at {
+    margin: 20px 0 10px 10px;
+}
+.faved {
+  color: red;
+}
