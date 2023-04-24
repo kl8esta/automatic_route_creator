@@ -3,6 +3,11 @@
 
 @section('content')
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <script src="https://kit.fontawesome.com/{{ env('FONT_AWESOME_API_KEY') }}.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{{ asset('css/route_post_list.css') }}">
+    </head>
     <body style="padding: 0 10px;">
         <h1>マイルート一覧</h1>
         <h5>{{Auth::user()->name}}</h5>
@@ -24,19 +29,30 @@
                             <h3>(公開済み)タイトル【{{ $route_post->title}}】</h3>
                         </a>
                     @endif
-                    <div class='spot_name' style="margin: 0 0 10px 10px;">
+                    <div class='spot_name'>
                         巡る場所：{{$route_post->tour_list}}
                     </div>
-                    <div class='duration' style="margin: 0 0 10px 10px;">
+                    <div class='duration'>
                         {{$route_post->duration}}
                     </div>
-                    <div class="post_comment" style="margin: 0 0 10px 10px;">
+                    <div class="post_comment">
                         "{{ $route_post->comment }}"
                     </div>                    
-                    <div class="updated_at" style="margin: 20px 0 10px 10px;">
+                    <div class="updated_at">
                         最終更新【{{ date('Y/m/d', strtotime($route_post->updated_at)) }}】
                     </div>
                 </div>
+                @if($favorite->favIsNull($route_post->id,Auth::user()->id,))
+                <span class="favorite-icon">
+                    <i class="fas fa-heart fav-toggle" style="width: 20px; height: 20px;" data-rtpost-id="{{ $route_post->id }}"></i>
+                    <span class="favoritesCount">{{$route_post->favorites_count}}</span>
+                </span>
+                @else
+                <span class="favorite-icon">
+                    <i class="fas fa-heart fav-toggle faved" style="width: 20px; height: 20px;" data-rtpost-id="{{ $route_post->id }}"></i>
+                    <span class="favoritesCount">{{$route_post->favorites_count}}</span>
+                </span>
+                @endif            
             @endforeach
         </div>
         <div class='paginate'>{{ $own_posts->links() }}</div>
@@ -44,5 +60,6 @@
             <p><a href="/">マイページに戻る</a></p>
         </div>
     </body>
+    <script src="{{ asset('js/ajaxfav.js') }}" defer></script>
 </html>
 @endsection

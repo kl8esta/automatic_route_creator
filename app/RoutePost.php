@@ -24,11 +24,15 @@ class RoutePost extends Model
     public function getPaginateByLimit(int $limit_count = 5)
     {
         //return $this->orderBy('updated_at', 'DESC')->paginate($limit_count);
-        return $this::with('user')->orderBy('updated_at', 'DESC')->paginate($limit_count);
+        return $this::with('user')->withCount('favorites')->orderBy('updated_at', 'DESC')->paginate($limit_count);
     }
     
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+    public function favorites()
+    {
+        return $this->hasMany('App\Favorite');
     }
 }
