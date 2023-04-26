@@ -11,13 +11,17 @@ use Auth;
 
 class FavoriteController extends Controller
 {
+    //// いいね情報をfavoriteに保存(削除)し、いいね数を更新する
     public function ajaxfav(Favorite $favorite, Request $request)
     {
+        // どのユーザ(id)がどの投稿(route_post_id)をいいねしたのかを取得
         $id = Auth::user()->id;
         $rtpost_id = json_decode($request->rtpost_id);
-        $test = 5;
+        
+        // いいねした情報がfavoritesテーブルにあるか確認
         $pushed = Favorite::where('route_post_id', $rtpost_id)->where('user_id', $id)->first();
         //$rtpost = RoutePost::findOrFail($rtpost_id);
+        
         // 空でない（既にいいねしている）なら
         if ($pushed !== null)
         {
@@ -41,7 +45,6 @@ class FavoriteController extends Controller
                 $fav->user_id = $id;
                 $fav->save();
                 //$fav->fill($in_fav)->save();
-                //$test = 99;
             }
             catch(\Exception $e){
                 echo $e->getMessage();
@@ -55,10 +58,11 @@ class FavoriteController extends Controller
         //$postLikesCount = RoutePost::withCount('favorites')->findOrFail($rtpost_id)primekey?->favorits_count;
         $favoritesCount = Favorite::where('route_post_id', $rtpost_id)->count();
         
-        $json = [
+        // Ajax通信の結果として送信
+        $send_data = [
             'favoritesCount' => $favoritesCount,
         ];
         
-        return response()->json($json);
+        return response()->json($send_data);
     }
 }
