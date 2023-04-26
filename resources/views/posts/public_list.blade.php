@@ -43,7 +43,7 @@
                     @if($favorite->favIsNull($route_post->id,Auth::user()->id))
                     <span class="favorite-icon">
                         <i class="fas fa-heart fav-toggle" style="width: 20px; height: 20px;" data-rtpost-id="{{ $route_post->id }}"></i>
-                        <span class="favCount">{{$route_post->favorites_count}}</span>
+                        <span class="favoritesCount">{{$route_post->favorites_count}}</span>
                     </span>
                     @else
                     <span class="favorite-icon">
