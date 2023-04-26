@@ -1,3 +1,16 @@
+body {
+    padding: 0 20px;
+}
+.create {
+    display:inline-block;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #333333;
+    border-radius: 10px;
+}
+.route_post {
+    margin: 10px 0;
+}
 .user_name,.spot_name,.duration,.post_comment {
     margin: 0 0 10px 10px;
 }
@@ -5,6 +18,23 @@
 .updated_at {
     margin: 20px 0 10px 10px;
 }
+
+.favorite-icon > i {
+    margin: 0 0 0 10px;    
+    width: 20px; 
+    height: 20px;
+    transition: 0.3s;
+}
+
+.favorite-icon > i:hover {
+    transform: scale(2);
+}
+
 .faved {
   color: red;
+}
+
+.home_back {
+    margin: 30px 0 0 0;
+    font-size: 15px;
 }

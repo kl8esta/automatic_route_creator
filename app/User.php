@@ -38,11 +38,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
+    // マイルート一覧の取得
     public function getOwnPaginateByLimit(int $limit_count = 5)
     {
         return $this::with('routePosts')->find(Auth::id())->routePosts()->withCount('favorites')->orderBy('updated_at', 'DESC')->paginate($limit_count);
     }
     
+    // リレーション
     public function routePosts()
     {
         return $this->hasMany('App\RoutePost');
