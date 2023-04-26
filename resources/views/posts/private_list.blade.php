@@ -8,18 +8,18 @@
         <script src="https://kit.fontawesome.com/{{ env('FONT_AWESOME_API_KEY') }}.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="{{ asset('css/route_post_list.css') }}">
     </head>
-    <body style="padding: 0 10px;">
+    <body>
         <h1>マイルート一覧</h1>
         <h5>{{Auth::user()->name}}</h5>
-        <p class='create' style="display:inline-block; padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px;">
+        <p class='create'>
             <a href='/posts/public_list'>→ 公開されているルートを見る</a>
         </p>
-        <p class='create' style="display:inline-block; padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px;">
+        <p class='create'>
             <a href='/posts/create_route'>ルートの新規作成</a>
         </p>
         <div class='own_posts'>
             @foreach ($own_posts as $route_post)
-                <div class='route_post' style="margin: 10px 0;">
+                <div class='route_post'>
                     @if ($route_post->status_flag == 0)
                         <a href="/posts/private_list/{{ $route_post->id}}">
                             <h3>(非公開)タイトル【{{ $route_post->title}}】</h3>
@@ -44,19 +44,19 @@
                 </div>
                 @if($favorite->favIsNull($route_post->id,Auth::user()->id,))
                 <span class="favorite-icon">
-                    <i class="fas fa-heart fav-toggle" style="width: 20px; height: 20px;" data-rtpost-id="{{ $route_post->id }}"></i>
+                    <i class="fas fa-heart fav-toggle" data-rtpost-id="{{ $route_post->id }}"></i>
                     <span class="favoritesCount">{{$route_post->favorites_count}}</span>
                 </span>
                 @else
                 <span class="favorite-icon">
-                    <i class="fas fa-heart fav-toggle faved" style="width: 20px; height: 20px;" data-rtpost-id="{{ $route_post->id }}"></i>
+                    <i class="fas fa-heart fav-toggle faved" data-rtpost-id="{{ $route_post->id }}"></i>
                     <span class="favoritesCount">{{$route_post->favorites_count}}</span>
                 </span>
                 @endif            
             @endforeach
         </div>
         <div class='paginate'>{{ $own_posts->links() }}</div>
-        <div class="home_back" style="margin: 30px 0 0 0; font-size: 15px;">
+        <div class="home_back">
             <p><a href="/">マイページに戻る</a></p>
         </div>
     </body>
