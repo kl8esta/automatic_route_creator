@@ -1,18 +1,34 @@
 body {
     padding: 0 20px;
 }
-.create {
+
+.pre_content,.content {
+    padding: 10px 20px;
+}
+
+.index_loop,.view_list {
+    margin-bottom: 30px;
+}
+.create,.route_creation {
     display:inline-block;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #333333;
     border-radius: 10px;
 }
+
 .route_post {
     margin: 10px 0;
 }
+
 .user_name,.spot_name,.duration,.post_comment {
     margin: 0 0 10px 10px;
+}
+
+.route_maps {
+    width: 270px; 
+    height: 160px; 
+    margin: 10px 5px 5px 10px; 
 }
 
 .updated_at {

@@ -87,6 +87,7 @@ class RoutePostController extends Controller
     # 公開ルート一覧ページの表示
     public function show_public_list(RoutePost $route_post, Favorite $favorite)
     {
+        //dd($route_post->getPaginateByLimit());
         $send = [
             'route_posts' => $route_post->getPaginateByLimit(),
             'favorite' => $favorite,
