@@ -47,38 +47,47 @@
         </div>
     </body>
     <script>
+        // Direction API レスポンスの受け取り
+        const response = JSON.parse(@json($route_post->route_json));
+        
         // Googleマップ上の処理を常時行うための関数
         function initMap() {
-            for (let i = 0; i < {{ count($route_posts) }}; i++)
-            {
-                let route_input = document.getElementById('route_input_' + String(i));
-                //let response = JSON.parse(@json($route_post->route_json)));
-                let response = JSON.parse(JSON.parse(route_input.value));
-                //console.log(response);
-                //console.log(typeof(response));
+            // 初回の表示マップの設定オプション
+            const route_map = new google.maps.Map(
+                document.getElementById("route_map"),
+                {
+                    center: { lat: 35.6810, lng: 139.7673 },
+                    zoom: 13,
+                    mapTypeId: "roadmap",
+                }
+            );
+            
+            // Directions APIの起動
+            let directionsService = new google.maps.DirectionsService();
+            
+            // マップ描画機能の起動
+            let directionsRenderer = new google.maps.DirectionsRenderer();
+            // const waypoint_marker = new google.maps.MarkerOptions();
+            
+            // ルートナビの起動
+            directionsRenderer.setPanel(document.getElementById('route_panel'));
+                /*directionsRenderer.setOptions({
+                    suppressMarkers: false,
+                    suppressPolylines: true,
+                    suppressInfoWindows: false,
+                    draggable: true,
+                    preserveViewport: false,
+                    markerOptions: {
+                        title: 'title'
+                    },
+                });*/
                 
-                // 初回の表示マップの設定オプション
-                let route_map = new google.maps.Map(
-                    document.getElementById("route_map_" + String(i)),
-                    {
-                        center: { lat: 35.6810, lng: 139.7673 },
-                        zoom: 13,
-                        mapTypeId: "roadmap",
-                    }
-                );
-                
-                // Directions APIの起動
-                let directionsService = new google.maps.DirectionsService();
-                
-                // マップ描画機能の起動
-                let directionsRenderer = new google.maps.DirectionsRenderer();
-                    
-                // マップの起動
-                directionsRenderer.setMap(route_map);
-                // マップに観光ルートを描画する
-                directionsRenderer.setDirections(response);
-            }
+            // マップの起動
+            directionsRenderer.setMap(route_map);
+            // マップに観光ルートを描画する
+            directionsRenderer.setDirections(response);
         }
+        window.initMap = initMap;
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap&libraries=places,geometry" defer>
     </script>
