@@ -9,16 +9,16 @@
         <link rel="stylesheet" href="{{ asset('css/route_post_list.css') }}">
     </head>
     <body>
-        <h1>公開済みルート一覧</h1>
-        <h3>{{Auth::user()->name}}</h3>
+        <h1>いいねしたルート</h1>
+        <h5>{{Auth::user()->name}}</h5>
         <p class='create'>
-            <a href='/posts/private_list'>→ マイルート一覧へ</a>
+            <a href='/posts/public_list'>→ 公開されているルートを見る</a>
         </p>
         <p class='create'>
             <a href='/posts/create_route'>ルートの新規作成</a>
         </p>
-        <div class='route_posts'>
-            @foreach ($route_posts as $route_post)
+        <div class='fav_posts'>
+            @foreach ($fav_posts as $route_post)
                 @if($route_post->status_flag == 1)
                     <div class='route_post'>
                         <a href="/posts/public_list/{{ $route_post->id}}">
@@ -40,26 +40,15 @@
                             <div class="post_comment">
                                 "{{ $route_post->comment }}"
                             </div>                    
-                        </div>    
+                        </div>                      
                         <div class="updated_at">
                             最終更新【{{ date('Y/m/d', strtotime($route_post->updated_at)) }}】
                         </div>
                     </div>
-                    @if($favorite->favIsNull($route_post->id,Auth::user()->id))
-                    <span class="favorite-icon">
-                        <i class="fas fa-heart fav-toggle" data-rtpost-id="{{ $route_post->id }}"></i>
-                        <span class="favoritesCount">{{$route_post->favorites_count}}</span>
-                    </span>
-                    @else
-                    <span class="favorite-icon">
-                        <i class="fas fa-heart fav-toggle faved" data-rtpost-id="{{ $route_post->id }}"></i>
-                        <span class="favoritesCount">{{$route_post->favorites_count}}</span>
-                    </span>
-                    @endif
                 @endif
             @endforeach
         </div>
-        <div class='paginate'>{{ $route_posts->links() }}</div>
+        <div class='paginate'>{{ $fav_posts->links() }}</div>
         <div class="home_back">
             <p><a href="/">マイページに戻る</a></p>
         </div>
@@ -68,7 +57,7 @@
     <script>
         // Googleマップ上の処理を常時行うための関数
         function initMap() {
-            for (let i = 0; i < {{ count($route_posts) }}; i++)
+            for (let i = 0; i < {{ count($fav_posts) }}; i++)
             {
                 let route_input = document.getElementById('route_input_' + String(i));
                 //let response = JSON.parse(@json($route_post->route_json)));
@@ -101,5 +90,6 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap&libraries=places,geometry" defer>
     </script>
+    
 </html>
 @endsection

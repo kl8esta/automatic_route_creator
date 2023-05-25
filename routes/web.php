@@ -35,6 +35,10 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/posts/private_list', 'UserController@show_private_list');
     Route::get('/posts/private_list/{route_post}', 'RoutePostController@private_list_one');
     Route::post('/ajaxfav', 'FavoriteController@ajaxfav');
+    
+    // いいねルートの一覧ページ
+    Route::get('/posts/favorite_list', 'UserController@show_favorite_list');
+    
     // マイルートの編集・更新form送信・削除のルーティング
     Route::get('/posts/{route_post}/edit', 'RoutePostController@editPost');
     Route::put('/posts/{route_post}', 'RoutePostController@updatePost');
